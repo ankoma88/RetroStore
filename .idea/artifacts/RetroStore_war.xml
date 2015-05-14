@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="RetroStore:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="retrostore.war">
+      <element id="artifact" artifact-name="RetroStore:war exploded" />
+    </root>
+  </artifact>
+</component>
