@@ -10,9 +10,19 @@
         <servlet-class>com.ak.rstore.servlets.StartServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>ProductShowingServlet</servlet-name>
+        <servlet-class>com.ak.rstore.servlets.ProductShowingServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>StartServlet</servlet-name>
         <url-pattern>/index.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ProductShowingServlet</servlet-name>
+        <url-pattern>/showProducts</url-pattern>
     </servlet-mapping>
 
 </web-app>

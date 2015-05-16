@@ -1529,9 +1529,10 @@
     </table>
     <table name="category" schema="public" catalog="rstoredb" type="TABLE">
       <column name="cat_id" sqlType="serial" precision="10" scale="0" nullable="false" jdbcType="4" def="bmV4dHZhbCgnY2F0ZWdvcnlfY2F0X2lkX3NlcSc6OnJlZ2NsYXNzKQ==" autoIncrement="true"/>
-      <column name="cat_name" sqlType="varchar" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="cat_name" sqlType="varchar" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="category_pkey" columns="cat_id"/>
       <exported-key name="fk_cl7yifx05dbvjwdag4fhmqs62" table="product" schema="public" catalog="rstoredb" columns="category_cat_id"/>
+      <index name="uk_d5cnrgbfiu8jhkerl7hfoyx2r" unique="true" columns="cat_name"/>
     </table>
     <table name="category_cat_id_seq" schema="public" catalog="rstoredb" type="SEQUENCE">
       <column name="sequence_name" sqlType="name" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>
@@ -1549,14 +1550,14 @@
       <column name="customer_id" sqlType="serial" precision="10" scale="0" nullable="false" jdbcType="4" def="bmV4dHZhbCgnY3VzdG9tZXJfY3VzdG9tZXJfaWRfc2VxJzo6cmVnY2xhc3Mp" autoIncrement="true"/>
       <column name="first_name" sqlType="varchar" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="last_name" sqlType="varchar" precision="255" scale="0" nullable="true" jdbcType="12"/>
-      <column name="login_name" sqlType="varchar" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="login_name" sqlType="varchar" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="money_spent" sqlType="float8" precision="17" scale="17" nullable="true" jdbcType="8"/>
       <column name="password" sqlType="varchar" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="purchases_number" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="registration_date" sqlType="date" precision="13" scale="0" nullable="false" jdbcType="91"/>
       <primary-key name="customer_pkey" columns="customer_id"/>
       <exported-key name="fk_4y7a53tiuyio4824i200bkl33" table="shop_order" schema="public" catalog="rstoredb" columns="customer_customer_id"/>
-      <index name="uk_iiodcl62bn952839i63frb8ym" unique="true" columns="registration_date"/>
+      <index name="uk_6cxdtli2yhkc67glks55smyrd" unique="true" columns="login_name"/>
     </table>
     <table name="customer_customer_id_seq" schema="public" catalog="rstoredb" type="SEQUENCE">
       <column name="sequence_name" sqlType="name" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>
@@ -1577,12 +1578,14 @@
       <column name="name" sqlType="varchar" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="photo" sqlType="varchar" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="price" sqlType="numeric" precision="19" scale="2" nullable="true" jdbcType="2"/>
+      <column name="receiptdate" sqlType="timestamp" precision="29" scale="6" nullable="true" jdbcType="93"/>
       <column name="year" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="category_cat_id" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="order_order_id" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <primary-key name="product_pkey" columns="product_id"/>
       <foreign-key name="fk_cl7yifx05dbvjwdag4fhmqs62" columns="category_cat_id" ref-table="category" ref-schema="public" ref-catalog="" ref-columns="cat_id" update-rule="3" delete-rule="3" deferrability="2"/>
       <foreign-key name="fk_6frr4kjq1vbjf21yn6bc6k07t" columns="order_order_id" ref-table="shop_order" ref-schema="public" ref-catalog="" ref-columns="order_id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="uk_pxqmmd8yunmb2v63iwesibem7" unique="true" columns="description"/>
     </table>
     <table name="product_product_id_seq" schema="public" catalog="rstoredb" type="SEQUENCE">
       <column name="sequence_name" sqlType="name" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>

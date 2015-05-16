@@ -22,9 +22,11 @@ public class Customer implements Serializable {
     private Collection<ShopOrder> shopOrders;
 
     public Customer() {
+        this.registrationDate = new Date();
     }
 
     public Customer(String loginName) {
+        this.registrationDate = new Date();
         this.loginName = loginName;
     }
 
@@ -39,7 +41,7 @@ public class Customer implements Serializable {
         this.customerId = id;
     }
 
-    @Column (name = "LOGIN_NAME")
+    @Column (name = "LOGIN_NAME",unique=true, nullable = false)
     public String getLoginName() {
         return loginName;
     }
@@ -103,7 +105,7 @@ public class Customer implements Serializable {
         this.registrationDate = registrationDate;
     }
 
-    @OneToMany (mappedBy = "customer")
+    @OneToMany (mappedBy = "customer", cascade = CascadeType.ALL)
     public Collection<ShopOrder> getShopOrders() {
         return shopOrders;
     }
@@ -116,15 +118,8 @@ public class Customer implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Customer)) return false;
-
         Customer customer = (Customer) o;
-
-        if (customerId != customer.customerId) return false;
-        if (!firstName.equals(customer.firstName)) return false;
-        if (!lastName.equals(customer.lastName)) return false;
         if (!loginName.equals(customer.loginName)) return false;
-        if (!password.equals(customer.password)) return false;
-
         return true;
     }
 
@@ -140,6 +135,6 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "Customer "+ loginName + " " + customerId;
+        return "Customer "+ loginName;
     }
 }

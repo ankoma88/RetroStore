@@ -9,14 +9,10 @@ import org.hibernate.service.ServiceRegistry;
 
 public class ORMUtil {
     private static final SessionFactory sessionFactory = buildSessionFactory();
-    public static final ThreadLocal<Session> session = new ThreadLocal<Session>();
+    public static final ThreadLocal<Session> sessionThreadLocal = new ThreadLocal<Session>();
 
     private static SessionFactory buildSessionFactory() {
         try {
-//            // Create the SessionFactory from hibernate.cfg.xml
-//            return new Configuration().configure().buildSessionFactory(
-//                    new StandardServiceRegistryBuilder().build() );
-            // Create the SessionFactory from hibernate.cfg.xml
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -25,9 +21,7 @@ public class ORMUtil {
                     .buildSessionFactory(serviceRegistry);
 
             return sessionFactory;
-        }
-        catch (Throwable ex) {
-            // Make sure you log the exception, as it might be swallowed
+        } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
@@ -38,32 +32,47 @@ public class ORMUtil {
     }
 
     public static Session currentSession() throws HibernateException {
-        Session s = session.get();
-        if(s==null) {
+        Session s = sessionThreadLocal.get();
+        if (s == null) {
             s = sessionFactory.openSession();
-            session.set(s);
+            sessionThreadLocal.set(s);
         }
         return s;
     }
 
     public static void closeSession() throws HibernateException {
-        Session s = session.get();
-        session.set(null);
+        Session s = sessionThreadLocal.get();
+        sessionThreadLocal.set(null);
         if (s != null) {
             s.close();
         }
     }
-
-
-//    public Session getSession() {
-//        if(session == null) {
-//            session = sessionFactory.openSession();
-//        }
-//        return session;
-//    }
-//
-//    public void close() {
-//        sessionFactory.close();
-//    }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

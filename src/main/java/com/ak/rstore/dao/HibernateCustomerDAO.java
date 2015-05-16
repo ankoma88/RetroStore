@@ -1,16 +1,26 @@
 package com.ak.rstore.dao;
 
+import com.ak.rstore.exceptions.RecordAlreadyExistsException;
 import com.ak.rstore.model.Customer;
 import com.ak.rstore.util.ORMUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HibernateCustomerDAO implements CustomerDAO {
+    static final Logger log = LoggerFactory.getLogger(HibernateCategoryDAO.class);
+
     @Override
-    public void createCustomer(Customer customer) {
+    public void createCustomer(Customer customer) throws RecordAlreadyExistsException {
+        Customer custFound = findCustomerByName(customer.getLoginName());
+        if (custFound != null) {
+            throw new RecordAlreadyExistsException();
+        }
         Session session = ORMUtil.currentSession();
         Transaction tx = null;
         try {
@@ -67,10 +77,30 @@ public class HibernateCustomerDAO implements CustomerDAO {
     @Override
     public int deleteAllCustomers() {
         Session session = ORMUtil.currentSession();
-        String hql = "DELETE FROM Customer cust";
+        String hql = "FROM Customer c";
         Query query = session.createQuery(hql);
-        return query.executeUpdate();
+        List<Customer> results = query.list();
+        Transaction tx = null;
+        try {
+            for (Customer c : results) {
+                tx = session.beginTransaction();
+                Customer cat = (Customer) session.load(Customer.class, c.getCustomerId());
+                if (cat != null) {
+                    session.delete(cat);
+                }
+                tx.commit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            ORMUtil.closeSession();
+        }
+        return 0;
     }
+
 
     @Override
     public Customer findCustomerById(int customerId) {
@@ -83,7 +113,11 @@ public class HibernateCustomerDAO implements CustomerDAO {
         Session session = ORMUtil.currentSession();
         String hql = "FROM Customer cust WHERE cust.loginName= :loginName";
         Query query = session.createQuery(hql).setParameter("loginName", loginName);
-        return (Customer) query.list().get(0);
+        List results = query.list();
+        ORMUtil.closeSession();
+        if (results.size() != 0) {
+            return (Customer) results.get(0);
+        } else return null;
     }
 
     @Override
@@ -91,6 +125,11 @@ public class HibernateCustomerDAO implements CustomerDAO {
         Session session = ORMUtil.currentSession();
         String hql = "FROM Customer cust";
         Query query = session.createQuery(hql);
-        return query.list();
+        List<Customer> results = query.list();
+        ORMUtil.closeSession();
+        if (results == null) {
+            results = new ArrayList<>();
+        }
+        return results;
     }
 }

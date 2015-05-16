@@ -7,9 +7,9 @@ import com.ak.rstore.model.ShopOrder;
 import java.util.List;
 
 public interface ShopOrderDAO {
-    void createOrder(ShopOrder order);
-    void saveOrUpdateOrder(ShopOrder order);
-    void createOrderWithProductList(ShopOrder order,List<Product> productList);
+//    void addOrder(ShopOrder order);
+//    void saveOrUpdateOrder(ShopOrder order);
+    void createOrderWithProductList(List<Product> productList, Customer customer);
     boolean deleteOrder(ShopOrder order);
     int deleteAllOrders();
     ShopOrder findOrderById(int orderId);

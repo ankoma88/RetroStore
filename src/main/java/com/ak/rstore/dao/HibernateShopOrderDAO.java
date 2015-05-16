@@ -7,54 +7,68 @@ import com.ak.rstore.util.ORMUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HibernateShopOrderDAO implements ShopOrderDAO {
-    @Override
-    public void createOrder(ShopOrder order) {
-        Session session = ORMUtil.currentSession();
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-            session.persist(order);
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (tx != null) {
-                tx.rollback();
-            }
-        } finally {
-            ORMUtil.closeSession();
-        }
-    }
+    static final Logger log = LoggerFactory.getLogger(HibernateShopOrderDAO.class);
+
+//    @Override
+//    public void createOrder(ShopOrder order) {
+//        Session session = ORMUtil.currentSession();
+//        Transaction tx = null;
+//        try {
+//            tx = session.beginTransaction();
+//            session.persist(order);
+//            tx.commit();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            if (tx != null) {
+//                tx.rollback();
+//            }
+//        } finally {
+//            ORMUtil.closeSession();
+//        }
+//    }
+//
+//    @Override
+//    public void saveOrUpdateOrder(ShopOrder order) {
+//        Session session = ORMUtil.currentSession();
+//        Transaction tx = null;
+//        try {
+//            tx = session.beginTransaction();
+//            session.saveOrUpdate(order);
+//            tx.commit();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            if (tx != null) {
+//                tx.rollback();
+//            }
+//        } finally {
+//            ORMUtil.closeSession();
+//        }
+//    }
 
     @Override
-    public void saveOrUpdateOrder(ShopOrder order) {
+    public void createOrderWithProductList(List<Product> productList, Customer customer) {
+        ShopOrder shopOrder = new ShopOrder();
+        shopOrder.setOrderedProducts(productList);
         Session session = ORMUtil.currentSession();
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-            session.saveOrUpdate(order);
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (tx != null) {
-                tx.rollback();
-            }
-        } finally {
-            ORMUtil.closeSession();
-        }
-    }
+        String hql = "FROM Customer cust WHERE cust.loginName= :loginName";
+        Query query = session.createQuery(hql).setParameter("loginName", customer.getLoginName());
+        String ln = customer.getLoginName();
+        log.info("Log: loginname "+ln);
 
-    @Override
-    public void createOrderWithProductList(ShopOrder order, List<Product> productList) {
-        order.setOrderedProducts(productList);
-        Session session = ORMUtil.currentSession();
+        Customer foundCustomer = (Customer) query.list().get(0);
+        shopOrder.setCustomer(foundCustomer);
+
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.saveOrUpdate(order);
+            session.saveOrUpdate(shopOrder);
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,11 +101,30 @@ public class HibernateShopOrderDAO implements ShopOrderDAO {
     }
 
     @Override
-    public int deleteAllOrders() {
+    public int deleteAllOrders()  {
         Session session = ORMUtil.currentSession();
-        String hql = "DELETE FROM ShopOrder o";
+        String hql = "FROM ShopOrder o";
         Query query = session.createQuery(hql);
-        return query.executeUpdate();
+        List<ShopOrder> results = query.list();
+        Transaction tx = null;
+        try {
+            for (ShopOrder o : results) {
+                tx = session.beginTransaction();
+                ShopOrder shopOrder = (ShopOrder) session.load(ShopOrder.class, o.getOrderId());
+                if (shopOrder != null) {
+                    session.delete(shopOrder);
+                }
+                tx.commit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            ORMUtil.closeSession();
+        }
+        return 0;
     }
 
     @Override
@@ -101,11 +134,16 @@ public class HibernateShopOrderDAO implements ShopOrderDAO {
     }
 
     @Override
-    public List findAllOrders() {
+    public List findAllOrders()  {
         Session session = ORMUtil.currentSession();
         String hql = "FROM ShopOrder o";
         Query query = session.createQuery(hql);
-        return query.list();
+        List<ShopOrder> results = query.list();
+        ORMUtil.closeSession();
+        if (results == null) {
+            results = new ArrayList<ShopOrder>();
+        }
+        return results;
     }
 
     @Override

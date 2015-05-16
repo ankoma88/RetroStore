@@ -1,5 +1,6 @@
 package com.ak.rstore.dao;
 
+import com.ak.rstore.exceptions.RecordAlreadyExistsException;
 import com.ak.rstore.model.Category;
 import com.ak.rstore.model.Product;
 import com.ak.rstore.model.ShopOrder;
@@ -8,11 +9,17 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HibernateProductDAO implements ProductDAO {
+
     @Override
-    public void createProduct(Product product) {
+    public void createProduct(Product product) throws RecordAlreadyExistsException {
+        Product p = findProductByName(product.getName());
+        if (p != null) {
+            throw new RecordAlreadyExistsException();
+        }
         Session session = ORMUtil.currentSession();
         Transaction tx = null;
         try {
@@ -27,6 +34,13 @@ public class HibernateProductDAO implements ProductDAO {
         } finally {
             ORMUtil.closeSession();
         }
+    }
+
+    @Override
+    public void setCategoryToProduct(int productId, Category category) {
+        Product product = findProductById(productId);
+        product.setCategory(category);
+        saveOrUpdateProduct(product);
     }
 
     @Override
@@ -53,7 +67,10 @@ public class HibernateProductDAO implements ProductDAO {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.delete(product);
+            Product p = (Product) session.load(Product.class, product.getProductId());
+            if (p != null) {
+                session.delete(p);
+            }
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,9 +86,28 @@ public class HibernateProductDAO implements ProductDAO {
     @Override
     public int deleteAllProducts() {
         Session session = ORMUtil.currentSession();
-        String hql = "DELETE FROM Product p";
+        String hql = "FROM Product p";
         Query query = session.createQuery(hql);
-        return query.executeUpdate();
+        List<Product> results = query.list();
+        Transaction tx = null;
+        try {
+            for (Product c : results) {
+                tx = session.beginTransaction();
+                Product product = (Product) session.load(Product.class, c.getProductId());
+                if (product != null) {
+                    session.delete(product);
+                }
+                tx.commit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            ORMUtil.closeSession();
+        }
+        return 0;
     }
 
     @Override
@@ -85,7 +121,11 @@ public class HibernateProductDAO implements ProductDAO {
         Session session = ORMUtil.currentSession();
         String hql = "FROM Product p WHERE p.name= :name";
         Query query = session.createQuery(hql).setParameter("name", name);
-        return (Product) query.list().get(0);
+        List results = query.list();
+        ORMUtil.closeSession();
+        if (results.size() != 0) {
+            return (Product) results.get(0);
+        } else return null;
     }
 
     @Override
@@ -101,7 +141,12 @@ public class HibernateProductDAO implements ProductDAO {
         Session session = ORMUtil.currentSession();
         String hql = "FROM Product p";
         Query query = session.createQuery(hql);
-        return query.list();
+        List results = query.list();
+        ORMUtil.closeSession();
+        if (results == null) {
+            results = new ArrayList<>();
+        }
+        return results;
     }
 
     @Override
@@ -109,6 +154,29 @@ public class HibernateProductDAO implements ProductDAO {
         Session session = ORMUtil.currentSession();
         String hql = "FROM Product p WHERE p.order= :shopOrder";
         Query query = session.createQuery(hql).setParameter("shopOrder", order);
-        return query.list();
+        List results = query.list();
+        ORMUtil.closeSession();
+        if (results == null) {
+            results = new ArrayList<>();
+        }
+        return results;
     }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

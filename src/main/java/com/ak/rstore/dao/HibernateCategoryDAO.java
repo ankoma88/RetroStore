@@ -1,60 +1,53 @@
 package com.ak.rstore.dao;
 
+import com.ak.rstore.exceptions.RecordAlreadyExistsException;
 import com.ak.rstore.model.Category;
 import com.ak.rstore.util.ORMUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HibernateCategoryDAO implements CategoryDAO {
-
-
+    static final Logger log = LoggerFactory.getLogger(HibernateCategoryDAO.class);
 
     @Override
-    public void createCategory(Category category) {
-        Session session = ORMUtil.currentSession();
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-            session.persist(category);
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (tx != null) {
-                tx.rollback();
-            }
-        } finally {
-            ORMUtil.closeSession();
+    public void createCategory(Category category) throws RecordAlreadyExistsException {
+        Category catFound = findCategoryByName(category.getName());
+        if (catFound != null) {
+            throw new RecordAlreadyExistsException();
         }
+            Session session = ORMUtil.currentSession();
+            Transaction tx = null;
+            try {
+                tx = session.beginTransaction();
+                session.persist(category);
+                tx.commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (tx != null) {
+                    tx.rollback();
+                }
+            } finally {
+                ORMUtil.closeSession();
+            }
+
     }
 
     @Override
-    public void saveOrUpdateCategory(Category category) {
+    public boolean deleteCategoryAndAllProducts(Category category) {
         Session session = ORMUtil.currentSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.saveOrUpdate(category);
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (tx != null) {
-                tx.rollback();
+            Category cat = (Category) session.load(Category.class, category.getCat_id());
+            if (cat != null) {
+                session.delete(cat);
             }
-        } finally {
-            ORMUtil.closeSession();
-        }
-    }
-
-    @Override
-    public boolean deleteCategory(Category category) {
-        Session session = ORMUtil.currentSession();
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-            session.delete(category);
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,17 +61,38 @@ public class HibernateCategoryDAO implements CategoryDAO {
     }
 
     @Override
-    public int deleteAllCategories() {
+    public int deleteAllCategoriesWithProducts() {
         Session session = ORMUtil.currentSession();
-        String hql = "DELETE FROM Category cat";
+        String hql = "FROM Category cat";
         Query query = session.createQuery(hql);
-        return query.executeUpdate();
+        List<Category> results = query.list();
+        Transaction tx = null;
+        try {
+            for (Category c : results) {
+                tx = session.beginTransaction();
+                Category cat = (Category) session.load(Category.class, c.getCat_id());
+                if (cat != null) {
+                    session.delete(cat);
+                }
+                tx.commit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            ORMUtil.closeSession();
+        }
+        return 0;
     }
 
     @Override
     public Category findCategoryById(int catId) {
         Session session = ORMUtil.currentSession();
-        return (Category) session.get(Category.class, catId);
+        Category category = (Category) session.load(Category.class, catId);
+        ORMUtil.closeSession();
+        return category;
     }
 
     @Override
@@ -86,7 +100,11 @@ public class HibernateCategoryDAO implements CategoryDAO {
         Session session = ORMUtil.currentSession();
         String hql = "FROM Category cat WHERE cat.name= :catName";
         Query query = session.createQuery(hql).setParameter("catName", catName);
-        return (Category) query.list().get(0);
+        List results = query.list();
+        ORMUtil.closeSession();
+        if (results.size() != 0) {
+            return (Category) results.get(0);
+        } else return null;
     }
 
     @Override
@@ -96,7 +114,32 @@ public class HibernateCategoryDAO implements CategoryDAO {
         Query query = session.createQuery(hql);
         List<Category> results = query.list();
         ORMUtil.closeSession();
+        if (results == null) {
+            results = new ArrayList<Category>();
+        }
         return results;
-
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -43,7 +43,7 @@ public class ShopOrder implements Serializable {
     }
 
 
-    @OneToMany (mappedBy = "order")
+    @OneToMany (mappedBy = "order", cascade = CascadeType.ALL)
     public Collection<Product> getOrderedProducts() {
         return orderedProducts;
     }

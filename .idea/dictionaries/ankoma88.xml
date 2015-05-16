@@ -2,13 +2,17 @@
   <dictionary name="ankoma88">
     <words>
       <w>autoload</w>
+      <w>isnew</w>
+      <w>nsee</w>
       <w>postgre</w>
       <w>postgresql</w>
+      <w>receiptdate</w>
       <w>retrostore</w>
       <w>rstore</w>
       <w>rstoredb</w>
       <w>stdout</w>
       <w>templatemo</w>
+      <w>uncategorized</w>
     </words>
   </dictionary>
 </component>

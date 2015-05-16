@@ -21,6 +21,8 @@
         <!-- Drop and re-create all database on startup -->
         <property name="hibernate.hbm2ddl.auto">update</property>
 
+        <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
+
         <!-- Annotated entity classes -->
         <mapping class ="com.ak.rstore.model.Product"/>
         <mapping class="com.ak.rstore.model.Customer"/>

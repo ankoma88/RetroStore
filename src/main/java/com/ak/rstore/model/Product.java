@@ -3,6 +3,7 @@ package com.ak.rstore.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "product")
@@ -16,15 +17,23 @@ public class Product implements Serializable {
     private int amount;
     private int year;
     private String photo;
+    private Date receiptDate;
 
     private ShopOrder order;
     private Category category;
 
     public Product() {
+        this.receiptDate = new Date();
+        this.price = new BigDecimal(0);
+        this.amount = 1;
     }
 
-    public Product(String name) {
+    public Product(String name, String description) {
+        this.receiptDate = new Date();
         this.name = name;
+        this.description = description;
+        this.price = new BigDecimal(0);
+        this.amount = 1;
     }
 
     @Id
@@ -38,7 +47,7 @@ public class Product implements Serializable {
         this.productId = id;
     }
 
-    @Column (name = "NAME")
+    @Column (name = "NAME", nullable = false)
     public String getName() {
         return name;
     }
@@ -47,7 +56,7 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    @Column (name = "DESCRIPTION")
+    @Column (name = "DESCRIPTION", unique=true, nullable = false)
     public String getDescription() {
         return description;
     }
@@ -92,6 +101,15 @@ public class Product implements Serializable {
         this.photo = photo;
     }
 
+    @Column (name = "RECEIPTDATE", nullable = false)
+    public Date getReceiptDate() {
+        return receiptDate;
+    }
+
+    public void setReceiptDate(Date receiptDate) {
+        this.receiptDate = receiptDate;
+    }
+
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn
     public ShopOrder getOrder() {
@@ -102,7 +120,7 @@ public class Product implements Serializable {
         this.order = order;
     }
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn
     public Category getCategory() {
         return category;
@@ -119,13 +137,7 @@ public class Product implements Serializable {
 
         Product product = (Product) o;
 
-        if (amount != product.amount) return false;
-        if (productId != product.productId) return false;
-        if (year != product.year) return false;
         if (description != null ? !description.equals(product.description) : product.description != null) return false;
-        if (name != null ? !name.equals(product.name) : product.name != null) return false;
-        if (photo != null ? !photo.equals(product.photo) : product.photo != null) return false;
-        if (price != null ? !price.equals(product.price) : product.price != null) return false;
 
         return true;
     }

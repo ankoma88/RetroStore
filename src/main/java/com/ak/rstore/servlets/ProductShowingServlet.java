@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-public class StartServlet extends HttpServlet {
-    static final Logger log = LoggerFactory.getLogger(StartServlet.class);
+public class ProductShowingServlet extends HttpServlet {
+    static final Logger log = LoggerFactory.getLogger(ProductShowingServlet.class);
     StoreHouseManager manager = StoreHouseManager.INSTANCE;
 
     @Override
@@ -26,6 +26,22 @@ public class StartServlet extends HttpServlet {
         List<Product> newProducts = manager.retrieveNewProducts();
         session.setAttribute("categories", categories);
         session.setAttribute("newProducts", newProducts);
+
+        String categoryName = req.getParameter("cat");
+        String productName = req.getParameter("prod");
+        log.info("Log: chosen category: "+categoryName);
+        log.info("Log: chosen product: "+productName);
+
+        if (categoryName != null) {
+            Category chosenCategory = manager.findCategoryByName(categoryName);
+            log.info("Log: chosen category from db: "+chosenCategory.getName());
+            if (chosenCategory != null) {
+                List<Product> productList = manager.retrieveAllProductsOfCategory(chosenCategory);
+                session.setAttribute("productsOfCategory", productList);
+            }
+        }
+
+
 
 
         RequestDispatcher view = req.getRequestDispatcher("home.jsp");

@@ -9,14 +9,14 @@ public abstract class DAOFactory {
     public abstract ProductDAO getProductDAO();
     public abstract ShopOrderDAO getShopOrderDAO();
 
-    public static DAOFactory getDAOFactory(int whichFactory) {
+    public static  DAOFactory getDAOFactory(int whichFactory) {
         switch (whichFactory) {
             case HIBERNATE:
-                return new HibernateDAOFactory();
+                return HibernateDAOFactory.getInstance();
             case JDBC:
 //                return new JDBCDAOFactory();
             default:
-                return new HibernateDAOFactory();
+                return HibernateDAOFactory.getInstance();
         }
     }
 

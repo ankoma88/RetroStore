@@ -31,7 +31,7 @@ public class Category implements Serializable{
         this.cat_id = cat_id;
     }
 
-    @Column(name = "CAT_NAME")
+    @Column(name = "CAT_NAME", nullable = false)
     public String getName() {
         return name;
     }
@@ -40,7 +40,7 @@ public class Category implements Serializable{
         this.name = name;
     }
 
-    @OneToMany (mappedBy = "category")
+    @OneToMany (mappedBy = "category", cascade = CascadeType.ALL)
     public Set<Product> getProductSet() {
         return productSet;
     }
@@ -55,8 +55,6 @@ public class Category implements Serializable{
         if (!(o instanceof Category)) return false;
 
         Category category = (Category) o;
-
-        if (cat_id != category.cat_id) return false;
         if (!name.equals(category.name)) return false;
 
         return true;
