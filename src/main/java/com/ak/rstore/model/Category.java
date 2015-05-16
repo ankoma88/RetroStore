@@ -2,7 +2,7 @@ package com.ak.rstore.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -11,7 +11,7 @@ public class Category implements Serializable{
 
     private int cat_id;
     private String name;
-    private Set<Product> productSet;
+    private List<Product> products;
 
     public Category() {
     }
@@ -40,13 +40,13 @@ public class Category implements Serializable{
         this.name = name;
     }
 
-    @OneToMany (mappedBy = "category", cascade = CascadeType.ALL)
-    public Set<Product> getProductSet() {
-        return productSet;
+    @OneToMany (fetch = FetchType.EAGER, mappedBy = "category", cascade = CascadeType.ALL)
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setProductSet(Set<Product> productSet) {
-        this.productSet = productSet;
+    public void setProducts(List<Product> productSet) {
+        this.products = productSet;
     }
 
     @Override

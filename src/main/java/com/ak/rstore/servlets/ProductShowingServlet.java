@@ -35,10 +35,12 @@ public class ProductShowingServlet extends HttpServlet {
         if (categoryName != null) {
             Category chosenCategory = manager.findCategoryByName(categoryName);
             log.info("Log: chosen category from db: "+chosenCategory.getName());
-            if (chosenCategory != null) {
-                List<Product> productList = manager.retrieveAllProductsOfCategory(chosenCategory);
-                session.setAttribute("productsOfCategory", productList);
-            }
+            //                List<Product> productList = manager.retrieveAllProductsOfCategory(chosenCategory);
+
+
+
+            List<Product> productList = chosenCategory.getProducts();
+            req.setAttribute("productsOfCategory", productList);
         }
 
 

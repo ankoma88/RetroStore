@@ -95,8 +95,11 @@ public class MainTest {
 //        manager.deleteShopOrder(orders.get(0));
 
 
-        List<Product> productList = manager.retrieveNewProducts();
-        log.info("Log: new products: "+productList.toString());
+//        List<Product> productList = manager.retrieveNewProducts();
+//        log.info("Log: new products: "+productList.toString());
+
+        List<Product> products1 = c.getProducts();
+        log.info("Log: size "+products1.size());
     }
 
 

@@ -34,6 +34,8 @@ public class Product implements Serializable {
         this.description = description;
         this.price = new BigDecimal(0);
         this.amount = 1;
+        this.photo = "";
+        this.order = new ShopOrder();
     }
 
     @Id

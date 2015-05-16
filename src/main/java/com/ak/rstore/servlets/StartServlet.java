@@ -6,7 +6,6 @@ import com.ak.rstore.model.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,12 +23,16 @@ public class StartServlet extends HttpServlet {
         HttpSession session = req.getSession();
         List<Category> categories = manager.retrieveCategories();
         List<Product> newProducts = manager.retrieveNewProducts();
-        session.setAttribute("categories", categories);
-        session.setAttribute("newProducts", newProducts);
+        req.setAttribute("categories", categories);
+        req.setAttribute("newProducts", newProducts);
 
 
-        RequestDispatcher view = req.getRequestDispatcher("home.jsp");
-        view.forward(req, resp);
+//        RequestDispatcher view = req.getRequestDispatcher("home.jsp");
+//        view.forward(req, resp);
+
+        resp.sendRedirect("home.jsp");
+
+
 
 
     }
