@@ -122,7 +122,7 @@ public class HibernateProductDAO implements ProductDAO {
         String hql = "FROM Product p WHERE p.name= :name";
         Query query = session.createQuery(hql).setParameter("name", name);
         List results = query.list();
-        ORMUtil.closeSession();
+//        ORMUtil.closeSession();
         if (results.size() != 0) {
             return (Product) results.get(0);
         } else return null;
@@ -142,7 +142,7 @@ public class HibernateProductDAO implements ProductDAO {
         String hql = "FROM Product p";
         Query query = session.createQuery(hql);
         List results = query.list();
-        ORMUtil.closeSession();
+//        ORMUtil.closeSession();
         if (results == null) {
             results = new ArrayList<>();
         }
@@ -155,7 +155,7 @@ public class HibernateProductDAO implements ProductDAO {
         String hql = "FROM Product p WHERE p.order= :shopOrder";
         Query query = session.createQuery(hql).setParameter("shopOrder", order);
         List results = query.list();
-        ORMUtil.closeSession();
+//        ORMUtil.closeSession();
         if (results == null) {
             results = new ArrayList<>();
         }

@@ -1,0 +1,1 @@
+<jsp:forward page="/Start.do"></jsp:forward>

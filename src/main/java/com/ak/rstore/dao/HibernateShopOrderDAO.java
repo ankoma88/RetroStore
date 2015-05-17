@@ -139,7 +139,7 @@ public class HibernateShopOrderDAO implements ShopOrderDAO {
         String hql = "FROM ShopOrder o";
         Query query = session.createQuery(hql);
         List<ShopOrder> results = query.list();
-        ORMUtil.closeSession();
+//        ORMUtil.closeSession();
         if (results == null) {
             results = new ArrayList<ShopOrder>();
         }

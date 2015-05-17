@@ -2,13 +2,8 @@ package com.ak.rstore;
 
 import com.ak.rstore.manager.StoreHouseManager;
 import com.ak.rstore.model.Category;
-import com.ak.rstore.model.Customer;
-import com.ak.rstore.model.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainTest {
     static final Logger log = LoggerFactory.getLogger(MainTest.class);
@@ -17,38 +12,43 @@ public class MainTest {
     public static void main(String[] args) {
 
 
+        for (int i = 2; i < 11; i++) {
+            Category category = new Category("c" + i);
+            manager.addCategory(category);
 
-        Category category = new Category("c1");
-        manager.addCategory(category);
+        }
 
-        Product product1 = new Product("product1", "desc1");
-        manager.addProduct(product1);
-
-        Product product2 = new Product("product2", "desc2");
-        manager.addProduct(product2);
+//        Category category = new Category("c" + i);
+//        manager.addCategory(category);
 //
-        Customer cus1 = new Customer("cus1");
-        manager.addNewCustomer(cus1);
+//        Product product1 = new Product("product1", "desc1");
+//        manager.addProduct(product1);
 //
-        Product p1 = manager.findProductByName("product1");
-        Product p2 = manager.findProductByName("product2");
-        List<Product> products = new ArrayList<>();
-        products.add(p1);
-        products.add(p2);
-        Category c = manager.findCategoryByName("c1");
-//        Customer customer1 = manager.findCustomerByName("cus1");
-//        log.info("Log: found customer "+customer1);
-//
-//        manager.addOrder(products,customer1);
+//        Product product2 = new Product("product2", "desc2");
+//        manager.addProduct(product2);
+////
+//        Customer cus1 = new Customer("cus1");
+//        manager.addNewCustomer(cus1);
+////
+//        Product p1 = manager.findProductByName("product1");
+//        Product p2 = manager.findProductByName("product2");
+//        List<Product> products = new ArrayList<>();
+//        products.add(p1);
+//        products.add(p2);
+//        Category c = manager.findCategoryByName("c1");
+////        Customer customer1 = manager.findCustomerByName("cus1");
+////        log.info("Log: found customer "+customer1);
+////
+////        manager.addOrder(products,customer1);
 
 //        manager.deleteALlShopOrders();
 
 
 //        manager.deleteCategoryButLeaveProducts(c);
 //
-        manager.setCategoryToProduct(p1, c);
-        manager.setCategoryToProduct(p2, c);
-//
+//        manager.setCategoryToProduct(p1, c);
+//        manager.setCategoryToProduct(p2, c);
+////
 ////        manager.deleteCategoryWithAllProducts(c);
 //
 //
@@ -98,8 +98,8 @@ public class MainTest {
 //        List<Product> productList = manager.retrieveNewProducts();
 //        log.info("Log: new products: "+productList.toString());
 
-        List<Product> products1 = c.getProducts();
-        log.info("Log: size "+products1.size());
+//        List<Product> products1 = c.getProducts();
+//        log.info("Log: size " + products1.size());
     }
 
 

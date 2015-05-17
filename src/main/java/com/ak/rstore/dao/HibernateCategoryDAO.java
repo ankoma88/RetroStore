@@ -91,7 +91,7 @@ public class HibernateCategoryDAO implements CategoryDAO {
     public Category findCategoryById(int catId) {
         Session session = ORMUtil.currentSession();
         Category category = (Category) session.load(Category.class, catId);
-        ORMUtil.closeSession();
+//        ORMUtil.closeSession();
         return category;
     }
 
@@ -101,7 +101,7 @@ public class HibernateCategoryDAO implements CategoryDAO {
         String hql = "FROM Category cat WHERE cat.name= :catName";
         Query query = session.createQuery(hql).setParameter("catName", catName);
         List results = query.list();
-        ORMUtil.closeSession();
+//        ORMUtil.closeSession();
         if (results.size() != 0) {
             return (Category) results.get(0);
         } else return null;
@@ -113,7 +113,7 @@ public class HibernateCategoryDAO implements CategoryDAO {
         String hql = "FROM Category cat";
         Query query = session.createQuery(hql);
         List<Category> results = query.list();
-        ORMUtil.closeSession();
+//        ORMUtil.closeSession();
         if (results == null) {
             results = new ArrayList<Category>();
         }

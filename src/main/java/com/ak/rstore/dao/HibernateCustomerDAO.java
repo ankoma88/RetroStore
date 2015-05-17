@@ -114,7 +114,7 @@ public class HibernateCustomerDAO implements CustomerDAO {
         String hql = "FROM Customer cust WHERE cust.loginName= :loginName";
         Query query = session.createQuery(hql).setParameter("loginName", loginName);
         List results = query.list();
-        ORMUtil.closeSession();
+//        ORMUtil.closeSession();
         if (results.size() != 0) {
             return (Customer) results.get(0);
         } else return null;
@@ -126,7 +126,7 @@ public class HibernateCustomerDAO implements CustomerDAO {
         String hql = "FROM Customer cust";
         Query query = session.createQuery(hql);
         List<Customer> results = query.list();
-        ORMUtil.closeSession();
+//        ORMUtil.closeSession();
         if (results == null) {
             results = new ArrayList<>();
         }

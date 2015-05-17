@@ -10,35 +10,49 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
 public class StartServlet extends HttpServlet {
     static final Logger log = LoggerFactory.getLogger(StartServlet.class);
-    StoreHouseManager manager = StoreHouseManager.INSTANCE;
+    private static StoreHouseManager manager = StoreHouseManager.INSTANCE;
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
         List<Category> categories = manager.retrieveCategories();
         List<Product> newProducts = manager.retrieveNewProducts();
-        req.setAttribute("categories", categories);
-        req.setAttribute("newProducts", newProducts);
-
-
-//        RequestDispatcher view = req.getRequestDispatcher("home.jsp");
-//        view.forward(req, resp);
+        getServletContext().setAttribute("categories", categories);
+        getServletContext().setAttribute("newProducts", newProducts);
 
         resp.sendRedirect("home.jsp");
-
-
-
-
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
