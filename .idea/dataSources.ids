@@ -1555,9 +1555,11 @@
       <column name="password" sqlType="varchar" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="purchases_number" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="registration_date" sqlType="date" precision="13" scale="0" nullable="false" jdbcType="91"/>
+      <column name="email" sqlType="varchar" precision="20" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="customer_pkey" columns="customer_id"/>
       <exported-key name="fk_4y7a53tiuyio4824i200bkl33" table="shop_order" schema="public" catalog="rstoredb" columns="customer_customer_id"/>
       <index name="uk_6cxdtli2yhkc67glks55smyrd" unique="true" columns="login_name"/>
+      <index name="unique_email" unique="true" columns="email"/>
     </table>
     <table name="customer_customer_id_seq" schema="public" catalog="rstoredb" type="SEQUENCE">
       <column name="sequence_name" sqlType="name" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>

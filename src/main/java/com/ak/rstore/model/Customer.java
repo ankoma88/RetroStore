@@ -15,6 +15,7 @@ public class Customer implements Serializable {
     private String firstName;
     private String lastName;
     private String password;
+    private String email;
     private int purchasesNumber;
     private double moneySpent;
     private Date registrationDate;
@@ -28,6 +29,17 @@ public class Customer implements Serializable {
     public Customer(String loginName) {
         this.registrationDate = new Date();
         this.loginName = loginName;
+    }
+
+    public Customer(String firstName, String lastName, String loginName, String password, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.loginName = loginName;
+        this.password = password;
+        this.email = email;
+        this.registrationDate = new Date();
+        this.purchasesNumber = 0;
+        this.moneySpent = 0;
     }
 
     @Id
@@ -75,6 +87,15 @@ public class Customer implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Column (name = "EMAIL", unique = true, nullable = false)
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Column (name = "PURCHASES_NUMBER")

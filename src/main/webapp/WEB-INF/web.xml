@@ -18,6 +18,11 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
         <servlet-class>com.ak.rstore.servlets.ShowcaseServlet</servlet-class>
     </servlet>
 
+    <filter>
+        <filter-name>LoginRegFilter</filter-name>
+        <filter-class>com.ak.rstore.servlets.LoginRegFilter</filter-class>
+    </filter>
+
 
     <servlet-mapping>
     <servlet-name>StartServlet</servlet-name>
@@ -28,6 +33,16 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
         <servlet-name>ShowcaseServlet</servlet-name>
         <url-pattern>/Showcase.do</url-pattern>
     </servlet-mapping>
+
+
+
+    <filter-mapping>
+        <filter-name>LoginRegFilter</filter-name>
+        <url-pattern>/Register.do</url-pattern>
+        <url-pattern>/Login.do</url-pattern>
+        <url-pattern>/Logout.do</url-pattern>
+        <!--<url-pattern>*/</url-pattern>-->
+    </filter-mapping>
 
 
     <welcome-file-list>

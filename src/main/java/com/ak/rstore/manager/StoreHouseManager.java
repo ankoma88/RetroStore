@@ -148,6 +148,16 @@ public class StoreHouseManager {
         updateProduct(product);
     }
 
+    public void changeCategoryForProduct(int pId, String newButExistingCategoryName) throws NoSuchRecordException {
+        Product product = findProductById(pId);
+        Category category = findCategoryByName(newButExistingCategoryName);
+        if (category == null) {
+            throw new NoSuchRecordException();
+        }
+        product.setCategory(category);
+        updateProduct(product);
+    }
+
     public void changeAmountForProduct(String productName, int amount) throws NoSuchRecordException {
         Product product = findProductByName(productName);
         product.setAmount(amount);
@@ -215,6 +225,12 @@ public class StoreHouseManager {
       daoFactory.getShopOrderDAO().deleteOrder(shopOrder);
 
     }
+
+    public Product findProductById(int pId) {
+        Product product = daoFactory.getProductDAO().findProductById(pId);
+        return product;
+    }
+
 }
 
 

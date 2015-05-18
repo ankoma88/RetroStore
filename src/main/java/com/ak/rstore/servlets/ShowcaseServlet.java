@@ -30,9 +30,6 @@ public class ShowcaseServlet extends HttpServlet {
             req.setAttribute("choice","category");
         } else if (prodName != null) {
                 Product chosenProduct = manager.findProductByName(prodName);
-                if (chosenProduct == null) {
-                    chosenProduct = new Product("No such product", "");
-                }
                 req.setAttribute("chosenProduct", chosenProduct);
                 req.setAttribute("choice","product");
         }

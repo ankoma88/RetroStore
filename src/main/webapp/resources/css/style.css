@@ -52,7 +52,7 @@ img {
 	width: 100px;
 	padding: 4px 0 5px 0;
 	margin-bottom: 10px; 
-	background: url(/resources/images/btn_02.jpg) no-repeat;
+	background: url(../images/btn_02.jpg) no-repeat;
 	color: #FFFFFF;
 	font-weight: bold;
 	text-decoration: none;
@@ -65,17 +65,29 @@ img {
 	width: 100px;
 	padding: 4px 0 5px 0;
 	margin-bottom: 10px; 
-	background: url(/resources/images/btn_01.jpg) no-repeat;
+	background: url(../images/btn_01.jpg) no-repeat;
 	color: #ffffff;
 	font-weight: bold;
 	text-decoration: none;
+}
+
+.del_button a{
+    clear: both;
+    text-align: center;
+    display: block;
+    width: 130px;
+    padding: 4px 0 5px 0;
+    margin-bottom: 10px;
+    color: #ffffff;
+    font-size: small;
+    font-weight: normal;
 }
 
 #container {
 	width: 960px;
 	margin: 0 auto;
 	padding: 0 10px;
-	background: #1c1c1b url(/resources/images/bg.jpg) repeat-y;
+	background: #1c1c1b url(../images/bg.jpg) repeat-y;
 }
 
 
@@ -85,7 +97,7 @@ img {
 	clear: both;
 	width: 960px;
 	height: 45px;
-	background: url(/resources/images/menu_bg.jpg) no-repeat;
+	background: url(../images/menu_bg.jpg) no-repeat;
 }
 
 #menu ul {
@@ -108,6 +120,7 @@ img {
 	color: #969547;
 }
 
+
 #menu li a:hover, #menu li .current{
 	color: #fcf88e;
 }
@@ -121,7 +134,7 @@ img {
 	height: 150px;
 	padding: 0;
 	margin: 0;
-	background: url(/resources/images/banner.jpg);
+	background: url(../images/banner.jpg);
 }
 
 #header a,a:hover {
@@ -163,7 +176,7 @@ img {
 	margin: 0 0 20px 0;
 	font-size: 15px;
 	color: #cbc750;
-	background: url(/resources/images/h1_bg.jpg);
+	background: url(../images/h1_bg.jpg);
 }
 
 #content_right h2 {

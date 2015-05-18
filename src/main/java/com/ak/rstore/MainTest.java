@@ -1,22 +1,24 @@
-package com.ak.rstore;
+//package com.ak.rstore;
+//
+//import com.ak.rstore.manager.StoreHouseManager;
+//import com.ak.rstore.model.Product;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//
+//import java.math.BigDecimal;
+//
+//public class MainTest {
+//    static final Logger log = LoggerFactory.getLogger(MainTest.class);
+//    private static StoreHouseManager manager = StoreHouseManager.INSTANCE;
 
-import com.ak.rstore.manager.StoreHouseManager;
-import com.ak.rstore.model.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class MainTest {
-    static final Logger log = LoggerFactory.getLogger(MainTest.class);
-    private static StoreHouseManager manager = StoreHouseManager.INSTANCE;
-
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 
 
-        for (int i = 2; i < 11; i++) {
-            Category category = new Category("c" + i);
-            manager.addCategory(category);
-
-        }
+//        for (int i = 2; i < 11; i++) {
+//            Category category = new Category("c" + i);
+//            manager.addCategory(category);
+//
+//        }
 
 //        Category category = new Category("c" + i);
 //        manager.addCategory(category);
@@ -100,8 +102,15 @@ public class MainTest {
 
 //        List<Product> products1 = c.getProducts();
 //        log.info("Log: size " + products1.size());
-    }
 
 
-}
+//        manager.addProduct(new Product("product3", "p3Desc",
+//                new BigDecimal(Integer.valueOf(150)),
+//                Integer.valueOf("1"),
+//                Integer.valueOf("1900"), "no photo"));
+//
+//    }
+//
+//
+//}
 

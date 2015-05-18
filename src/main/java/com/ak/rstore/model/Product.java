@@ -38,6 +38,16 @@ public class Product implements Serializable {
         this.order = new ShopOrder();
     }
 
+    public Product(String name, String description, BigDecimal price, int amount, int year, String photo) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.amount = amount;
+        this.year = year;
+        this.photo = photo;
+        this.receiptDate = new Date();
+    }
+
     @Id
     @Column (name = "PRODUCT_ID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
