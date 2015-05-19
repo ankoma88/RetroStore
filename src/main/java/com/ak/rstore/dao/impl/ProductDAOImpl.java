@@ -1,5 +1,6 @@
-package com.ak.rstore.dao;
+package com.ak.rstore.dao.impl;
 
+import com.ak.rstore.dao.interfaces.ProductDAO;
 import com.ak.rstore.exceptions.RecordAlreadyExistsException;
 import com.ak.rstore.model.Category;
 import com.ak.rstore.model.Product;
@@ -12,7 +13,7 @@ import org.hibernate.Transaction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HibernateProductDAO implements ProductDAO {
+public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public void createProduct(Product product) throws RecordAlreadyExistsException {

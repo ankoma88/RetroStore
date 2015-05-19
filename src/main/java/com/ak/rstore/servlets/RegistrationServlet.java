@@ -1,6 +1,6 @@
 package com.ak.rstore.servlets;
 
-import com.ak.rstore.manager.StoreHouseManager;
+import com.ak.rstore.manager.ShopManager;
 import com.ak.rstore.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import java.io.IOException;
 @WebServlet("/Register.do")
 public class RegistrationServlet extends HttpServlet {
     static final Logger log = LoggerFactory.getLogger(StartServlet.class);
-    private static StoreHouseManager manager = StoreHouseManager.INSTANCE;
+    private static ShopManager manager = ShopManager.INSTANCE;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,13 +29,10 @@ public class RegistrationServlet extends HttpServlet {
         if (check != null) {
             req.setAttribute("regResult", "Such customer already exists.");
             req.getRequestDispatcher("registration.jsp").forward(req, resp);
+        } else {
+            manager.addNewCustomer(new Customer(firstName, lastName, loginName, password, email));
+            req.setAttribute("regResult", "Registration successful!");
+            req.getRequestDispatcher("registration.jsp").forward(req, resp);
         }
-        manager.addNewCustomer(new Customer(firstName, lastName, loginName, password, email));
-        Customer customer = manager.findCustomerByName(loginName);
-        if (customer != null) {
-            req.setAttribute("regResult","Registration successful!");
-        } else req.setAttribute("regResult", "Registration failed, please try again!");
-
-        req.getRequestDispatcher("registration.jsp").forward(req, resp);
     }
 }

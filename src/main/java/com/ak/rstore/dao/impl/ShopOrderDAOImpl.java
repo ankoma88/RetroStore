@@ -1,5 +1,6 @@
-package com.ak.rstore.dao;
+package com.ak.rstore.dao.impl;
 
+import com.ak.rstore.dao.interfaces.ShopOrderDAO;
 import com.ak.rstore.model.Customer;
 import com.ak.rstore.model.Product;
 import com.ak.rstore.model.ShopOrder;
@@ -13,8 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HibernateShopOrderDAO implements ShopOrderDAO {
-    static final Logger log = LoggerFactory.getLogger(HibernateShopOrderDAO.class);
+public class ShopOrderDAOImpl implements ShopOrderDAO {
+    static final Logger log = LoggerFactory.getLogger(ShopOrderDAOImpl.class);
 
 //    @Override
 //    public void createOrder(ShopOrder order) {

@@ -1,5 +1,6 @@
-package com.ak.rstore.dao;
+package com.ak.rstore.dao.impl;
 
+import com.ak.rstore.dao.interfaces.CategoryDAO;
 import com.ak.rstore.exceptions.RecordAlreadyExistsException;
 import com.ak.rstore.model.Category;
 import com.ak.rstore.util.ORMUtil;
@@ -12,29 +13,32 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HibernateCategoryDAO implements CategoryDAO {
-    static final Logger log = LoggerFactory.getLogger(HibernateCategoryDAO.class);
+public class CategoryDAOImpl implements CategoryDAO {
+    static final Logger log = LoggerFactory.getLogger(CategoryDAOImpl.class);
 
     @Override
     public void createCategory(Category category) throws RecordAlreadyExistsException {
+        if (category.getName() == null) {
+            category.setName("No category");
+        }
         Category catFound = findCategoryByName(category.getName());
         if (catFound != null) {
             throw new RecordAlreadyExistsException();
         }
-            Session session = ORMUtil.currentSession();
-            Transaction tx = null;
-            try {
-                tx = session.beginTransaction();
-                session.persist(category);
-                tx.commit();
-            } catch (Exception e) {
-                e.printStackTrace();
-                if (tx != null) {
-                    tx.rollback();
-                }
-            } finally {
-                ORMUtil.closeSession();
+        Session session = ORMUtil.currentSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.persist(category);
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
             }
+        } finally {
+            ORMUtil.closeSession();
+        }
 
     }
 

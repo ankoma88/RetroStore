@@ -1,5 +1,6 @@
-package com.ak.rstore.dao;
+package com.ak.rstore.dao.impl;
 
+import com.ak.rstore.dao.interfaces.CustomerDAO;
 import com.ak.rstore.exceptions.RecordAlreadyExistsException;
 import com.ak.rstore.model.Customer;
 import com.ak.rstore.util.ORMUtil;
@@ -12,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HibernateCustomerDAO implements CustomerDAO {
-    static final Logger log = LoggerFactory.getLogger(HibernateCategoryDAO.class);
+public class CustomerDAOImpl implements CustomerDAO {
+    static final Logger log = LoggerFactory.getLogger(CategoryDAOImpl.class);
 
     @Override
     public void createCustomer(Customer customer) throws RecordAlreadyExistsException {

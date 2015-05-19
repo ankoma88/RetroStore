@@ -15,11 +15,11 @@
         	<div class="content_left_section">
             	<h2>Categories</h2>
                     <c:forEach items="${applicationScope.categories}" var="category">
-                <form method="post" action="${root}/Admin.do">
+                <form method="post" action="${root}/Admin.do?reqFrom=fromAdm">
                     <table><tr>
-                        <td><a href="${root}/Admin.do?edtProdsOfCatName=${category.name}"><c:out value="${category.name}"/></a></td>
-                        <tr><td><div class="del_button"><a href="${root}/Admin.do?delCatName=${category.name}">Delete category and products</a></div></td>
-                        <tr><td><div class="del_button"><a href="${root}/Admin.do?delLeaveCatName=${category.name}">Delete only category</a></div></td>
+                        <td><a href="${root}/Admin.do?choice=chooseCatForEdtPrds&edtProdsOfCatName=${category.name}"><c:out value="${category.name}"/></a></td>
+                        <tr><td><div class="del_button"><a href="${root}/Admin.do?choice=delCatFull&delCatName=${category.name}">Delete category and products</a></div></td>
+                        <tr><td><div class="del_button"><a href="${root}/Admin.do?choice=delCatSoft&delLeaveCatName=${category.name}">Delete only category</a></div></td>
                     </tr></table>
                 </form>
                     </c:forEach>
@@ -28,10 +28,10 @@
             <div class="content_left_section">
                 <h2>Edit Products</h2>
                 <c:forEach items="${requestScope.categoryForEditingProds.products}" var="prodForEdt">
-                <form method="post" action="${root}/Admin.do">
+                <form method="post" action="${root}/Admin.do?reqFrom=fromAdm">
                     <table><tr>
-                        <a href="${root}/Admin.do?prodForEdtName=${prodForEdt.name}"><c:out value="${prodForEdt.name}"/></a>
-                        <tr><td><div class="del_button"><a href="${root}/Admin.do?delProdName=${prodForEdt.name}">Delete product</a></div></td>
+                        <a href="${root}/Admin.do?choice=edtProd&prodForEdtName=${prodForEdt.name}"><c:out value="${prodForEdt.name}"/></a>
+                        <tr><td><div class="del_button"><a href="${root}/Admin.do?choice=delProd&delProdName=${prodForEdt.name}">Delete product</a></div></td>
                     </tr></table>
                 </form>
 
@@ -41,7 +41,7 @@
 
         <div id="content_right">
 
-            <form method="post" action="${root}/Admin.do">
+            <form method="post" action="${root}/Admin.do?reqFrom=fromAdm&choice=addCat">
                 <div style="text-align: center">
                     <table border="1" width="30%" cellpadding="5">
                         <thead>
@@ -69,7 +69,7 @@
                 </div>
             </form>
 
-            <form method="post" action="${root}/Admin.do">
+            <form method="post" action="${root}/Admin.do?reqFrom=fromAdm&choice=addProd">
                 <div style="text-align: center">
                     <table border="1" width="30%" cellpadding="5">
                         <thead>
@@ -106,7 +106,7 @@
                         <tr>
                             <td>Price</td>
                             <td><label>
-                                <input type="number" name="pPrice" value=""/>
+                                <input type="number"  pattern="^\d+(\.|\,)\d{2}$" name="pPrice" value=""/>
                             </label></td>
                         </tr>
                         <tr>
@@ -134,7 +134,7 @@
                  </div>
             </form>
 
-            <form method="post" action="${root}/ProductEdit.do?editableProductId=${requestScope.editableProduct.productId}&oldCatName=${requestScope.editableProduct.category}">
+            <form method="post" action="${root}/ProductEdit.do?reqFrom=fromAdm&choice=editP&editableProductId=${requestScope.editableProduct.productId}&oldCatName=${requestScope.editableProduct.category}">
                 <div style="text-align: center">
                     <table border="1" width="30%" cellpadding="5">
                         <thead>
@@ -164,7 +164,7 @@
                         <tr>
                             <td>New amount value</td>
                             <td><label>
-                                <input type="number" name="pAmount" value="${requestScope.editableProduct.amount}"/>
+                                <input type="number" pattern="^\d+(\.|\,)\d{2}$" name="pAmount" value="${requestScope.editableProduct.amount}"/>
                             </label></td>
                         </tr>
                         <tr>

@@ -1,6 +1,6 @@
 package com.ak.rstore.manager;
 
-import com.ak.rstore.dao.DAOFactory;
+import com.ak.rstore.dao.interfaces.DAOFactory;
 import com.ak.rstore.exceptions.NoSuchRecordException;
 import com.ak.rstore.exceptions.RecordAlreadyExistsException;
 import com.ak.rstore.model.Category;
@@ -12,18 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public class StoreHouseManager {
-    static final Logger log = LoggerFactory.getLogger(StoreHouseManager.class);
+public class ShopManager {
+    static final Logger log = LoggerFactory.getLogger(ShopManager.class);
 
-    public static final StoreHouseManager INSTANCE = new StoreHouseManager();
+    public static final ShopManager INSTANCE = new ShopManager();
     private DAOFactory daoFactory;
 
-    private StoreHouseManager() {
+    private ShopManager() {
         daoFactory = DAOFactory.getDAOFactory(Properties.ORM);
     }
 
@@ -138,25 +135,31 @@ public class StoreHouseManager {
         daoFactory.getProductDAO().saveOrUpdateProduct(product);
     }
 
-    public void changeCategoryForProduct(String productName, String newButExistingCategoryName) throws NoSuchRecordException {
-        Product product = findProductByName(productName);
+    public void changeCategoryForProduct(int pId, String newButExistingCategoryName) throws NoSuchRecordException, RecordAlreadyExistsException {
+        Product product = findProductById(pId);
         Category category = findCategoryByName(newButExistingCategoryName);
-        if (category == null) {
-            throw new NoSuchRecordException();
+        if (category == null || Objects.equals(category.getName(), "")) {
+            Category defCat = findCategoryByName("No category");
+            if (defCat == null) {
+                daoFactory.getCategoryDAO().createCategory(new Category("No category"));
+            }
+            category = findCategoryByName("No category");
         }
+        log.info("Log: product: "+product);
+        log.info("Log: category: "+category.getName());
         product.setCategory(category);
         updateProduct(product);
     }
 
-    public void changeCategoryForProduct(int pId, String newButExistingCategoryName) throws NoSuchRecordException {
-        Product product = findProductById(pId);
-        Category category = findCategoryByName(newButExistingCategoryName);
-        if (category == null) {
-            throw new NoSuchRecordException();
-        }
-        product.setCategory(category);
-        updateProduct(product);
-    }
+//    public void changeCategoryForProduct(int pId, String newButExistingCategoryName) throws NoSuchRecordException {
+//        Product product = findProductById(pId);
+//        Category category = findCategoryByName(newButExistingCategoryName);
+//        if (category == null) {
+//            throw new NoSuchRecordException();
+//        }
+//        product.setCategory(category);
+//        updateProduct(product);
+//    }
 
     public void changeAmountForProduct(String productName, int amount) throws NoSuchRecordException {
         Product product = findProductByName(productName);

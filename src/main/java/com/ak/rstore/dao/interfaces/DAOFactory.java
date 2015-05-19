@@ -1,4 +1,6 @@
-package com.ak.rstore.dao;
+package com.ak.rstore.dao.interfaces;
+
+import com.ak.rstore.dao.impl.DAOFactoryImpl;
 
 public abstract class DAOFactory {
     public static final int HIBERNATE = 1;
@@ -12,11 +14,11 @@ public abstract class DAOFactory {
     public static  DAOFactory getDAOFactory(int whichFactory) {
         switch (whichFactory) {
             case HIBERNATE:
-                return HibernateDAOFactory.getInstance();
+                return DAOFactoryImpl.getInstance();
             case JDBC:
 //                return new JDBCDAOFactory();
             default:
-                return HibernateDAOFactory.getInstance();
+                return DAOFactoryImpl.getInstance();
         }
     }
 

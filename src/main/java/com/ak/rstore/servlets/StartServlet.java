@@ -1,6 +1,6 @@
 package com.ak.rstore.servlets;
 
-import com.ak.rstore.manager.StoreHouseManager;
+import com.ak.rstore.manager.ShopManager;
 import com.ak.rstore.model.Category;
 import com.ak.rstore.model.Customer;
 import com.ak.rstore.model.Product;
@@ -13,10 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class StartServlet extends HttpServlet {
     static final Logger log = LoggerFactory.getLogger(StartServlet.class);
-    private static StoreHouseManager manager = StoreHouseManager.INSTANCE;
+    private static ShopManager manager = ShopManager.INSTANCE;
 
 
     @Override
@@ -30,21 +31,34 @@ public class StartServlet extends HttpServlet {
     }
 
     private void loadData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String reqFrom = req.getParameter("reqFrom");
+
         List<Category> categories = manager.retrieveCategories();
         List<Product> newProducts = manager.retrieveNewProducts();
         getServletContext().setAttribute("categories", categories);
         getServletContext().setAttribute("newProducts", newProducts);
 
-        Customer sessionUser = (Customer) req.getSession().getAttribute("currentCustomer");
+        if (Objects.equals(reqFrom, "fromAdm")) {
+            resp.sendRedirect("admin.jsp");
+            return;
+        }
 
-        if (sessionUser != null && sessionUser.getLoginName().equals("admin")) {
-            req.getRequestDispatcher("admin.jsp").forward(req, resp);
+        if (checkAndForwardToAdminPage(req, resp)) {
+            resp.sendRedirect("admin.jsp");
             return;
         }
 
 
-        req.getRequestDispatcher("home.jsp").forward(req,resp);
+        resp.sendRedirect("home.jsp");
     }
+
+    private boolean checkAndForwardToAdminPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Customer sessionUser = (Customer) req.getSession().getAttribute("currentCustomer");
+        return (sessionUser != null && sessionUser.getLoginName().equals("admin"));
+    }
+
+
+
 }
 
 

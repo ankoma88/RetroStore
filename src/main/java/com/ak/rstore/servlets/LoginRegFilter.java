@@ -27,19 +27,14 @@ public class LoginRegFilter implements Filter {
         if (url.contains("/Logout.do")) {
             if (curCustomer != null) {
                 req.getSession().setAttribute("currentCustomer", null);
-                log.info("Log: /logout logged out");
-
             }
             resp.sendRedirect("home.jsp");
-            return;
         } else {
             if (curCustomer != null) {
                 req.getSession().setAttribute("currentCustomer", null);
-                log.info("Log: /other logged out");
             }
             filterChain.doFilter(servletRequest, servletResponse);
         }
-
 
     }
 

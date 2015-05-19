@@ -1,6 +1,5 @@
 package com.ak.rstore.servlets;
 
-import com.ak.rstore.manager.StoreHouseManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +13,6 @@ import java.io.IOException;
 @WebServlet("/Search.do")
 public class SearchServlet extends HttpServlet {
     static final Logger log = LoggerFactory.getLogger(SearchServlet.class);
-    private static StoreHouseManager manager = StoreHouseManager.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

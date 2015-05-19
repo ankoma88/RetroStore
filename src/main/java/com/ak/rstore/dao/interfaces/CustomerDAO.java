@@ -1,4 +1,4 @@
-package com.ak.rstore.dao;
+package com.ak.rstore.dao.interfaces;
 
 import com.ak.rstore.exceptions.RecordAlreadyExistsException;
 import com.ak.rstore.model.Customer;
