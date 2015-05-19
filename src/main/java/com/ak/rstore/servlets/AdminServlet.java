@@ -44,7 +44,7 @@ public class AdminServlet extends HttpServlet {
             case ("delProd"):
                 if (delProdName != null) deleteProduct(req, resp, delProdName); break;
             default:
-                req.getRequestDispatcher("/Start.do?reqFrom=fromAdm");
+                resp.sendRedirect("admin.jsp");
         }
     }
 
@@ -53,6 +53,9 @@ public class AdminServlet extends HttpServlet {
         String choice = req.getParameter("choice");
 
         String cName = req.getParameter("cName");
+        String editableProductId = req.getParameter("editableProductId");
+        String oldCatName = req.getParameter("oldCatName");
+
         String pName = req.getParameter("pName");
         String pDesc = req.getParameter("pDesc");
         String pPrice = req.getParameter("pPrice");
@@ -61,7 +64,7 @@ public class AdminServlet extends HttpServlet {
         String pPhoto = req.getParameter("pPhoto");
         String pCat = req.getParameter("pCat");
 
-        if (cName == null|| Objects.equals(cName, "")) cName = "No category";
+
         if (pCat == null|| Objects.equals(pCat, "")) pCat = "No category";
         if (pName == null|| Objects.equals(pName, "")) pName = "No name";
         if(pDesc==null|| Objects.equals(pDesc, "")) pDesc = "No description";
@@ -70,6 +73,11 @@ public class AdminServlet extends HttpServlet {
         if(pYear==null|| Objects.equals(pYear, "")) pYear = "0";
         if(pPhoto==null|| Objects.equals(pPhoto, "")) pPhoto = "No photo";
 
+        if (cName == null|| Objects.equals(cName, "")) cName = "No category";
+
+        if(editableProductId==null|| Objects.equals(editableProductId, "")) editableProductId = "0";
+        if(oldCatName==null|| Objects.equals(oldCatName, "")) oldCatName = "No category";
+
         String[] params = {pName, pDesc, pAmount, pPrice, pYear, pPhoto, pCat};
 
         switch (choice) {
@@ -77,11 +85,68 @@ public class AdminServlet extends HttpServlet {
                 addCategory(req, resp, cName); break;
             case ("addProd"):
                 addProduct(req, resp, params); break;
+            case ("editP"):
+                changeProduct(req, resp, params, editableProductId, oldCatName); break;
             default: req.getRequestDispatcher("/Start.do?reqFrom=fromAdm");
         }
 
     }
 
+    private void changeProduct(HttpServletRequest req, HttpServletResponse resp, String[] params, String editableProductId, String oldCatName) throws ServletException, IOException {
+        Product updProd = manager.findProductById(Integer.parseInt(editableProductId));
+        if (updProd == null) {
+            resp.sendRedirect("admin.jsp");
+            return;
+        }
+
+        if (params[0] != null && !Objects.equals(params[0], updProd.getName())) updProd.setName(params[0]);
+        if (params[1] != null && !Objects.equals(params[1], updProd.getDescription())) updProd.setDescription(params[1]);
+        if (params[2] != null && Integer.valueOf(params[2]) != updProd.getAmount())
+            updProd.setAmount(Integer.valueOf(params[2]));
+        if (params[3] != null && !Objects.equals(new BigDecimal(params[3]), updProd.getPrice()))
+            updProd.setPrice(new BigDecimal(params[3]));
+        if (params[4] != null && Integer.valueOf(params[4]) != updProd.getYear()) updProd.setYear(Integer.valueOf(params[4]));
+
+        //TODO photo
+
+        manager.updateProduct(updProd);
+
+        changeCategoryOfProduct(editableProductId, params[6], oldCatName);
+
+        req.setAttribute("prodEditResult", "Product updated.");
+        resp.sendRedirect("/Start.do");
+    }
+
+    private void changeCategoryOfProduct(String editableProductId, String pCat, String oldCatName) {
+        Category chkCat;
+        if ((pCat != null) && !Objects.equals(pCat, oldCatName)) {
+            chkCat = manager.findCategoryByName(pCat);
+            if (chkCat == null) {
+                chkCat = new Category(pCat);
+                manager.addCategory(chkCat);
+                try {
+                    manager.changeCategoryForProduct(Integer.parseInt(editableProductId), chkCat.getName());
+                } catch (NoSuchRecordException e) {
+                    log.info("Log: " + e.MESSAGE);
+                    e.printStackTrace();
+                } catch (RecordAlreadyExistsException e) {
+                    log.info("Log: " + e.MESSAGE);
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    manager.changeCategoryForProduct(Integer.parseInt(editableProductId), chkCat.getName());
+                } catch (NoSuchRecordException e) {
+                    log.info("Log: " + e.MESSAGE);
+                    e.printStackTrace();
+                } catch (RecordAlreadyExistsException e) {
+                    log.info("Log: " + e.MESSAGE);
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
 
     private void addProduct(HttpServletRequest req, HttpServletResponse resp, String[] params ) throws IOException, ServletException {
         Product checkProd = manager.findProductByName(params[0]);

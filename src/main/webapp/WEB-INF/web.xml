@@ -23,7 +23,6 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
         <filter-class>com.ak.rstore.servlets.LoginRegFilter</filter-class>
     </filter>
 
-
     <servlet-mapping>
     <servlet-name>StartServlet</servlet-name>
     <url-pattern>/Start.do</url-pattern>

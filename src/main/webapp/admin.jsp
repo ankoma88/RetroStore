@@ -134,7 +134,7 @@
                  </div>
             </form>
 
-            <form method="post" action="${root}/ProductEdit.do?reqFrom=fromAdm&choice=editP&editableProductId=${requestScope.editableProduct.productId}&oldCatName=${requestScope.editableProduct.category}">
+            <form method="post" action="${root}/Admin.do?reqFrom=fromAdm&choice=editP&editableProductId=${requestScope.editableProduct.productId}&oldCatName=${requestScope.editableProduct.category}">
                 <div style="text-align: center">
                     <table border="1" width="30%" cellpadding="5">
                         <thead>
