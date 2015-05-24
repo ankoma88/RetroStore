@@ -35,7 +35,7 @@ public class Product implements Serializable {
         this.price = new BigDecimal(0);
         this.amount = 1;
         this.photo = "";
-        this.order = new ShopOrder();
+
     }
 
     public Product(String name, String description, BigDecimal price, int amount, int year, String photo) {

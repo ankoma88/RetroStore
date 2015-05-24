@@ -21,6 +21,8 @@ public class ShowcaseServlet extends HttpServlet {
         String catName = req.getParameter("catName");
         String prodName = req.getParameter("prodName");
 
+        req.getSession().setAttribute("reqFrom","fromUsr");
+
         if (catName != null) {
             chooseCategory(req, resp, catName);
         } else if (prodName != null) {
@@ -34,8 +36,11 @@ public class ShowcaseServlet extends HttpServlet {
         if (chosenCategory == null) {
             chosenCategory = new Category("No such category");
         }
+        int pSize = chosenCategory.getProducts().size();
+        System.out.println("pSize="+pSize);
         req.setAttribute("chosenCategory", chosenCategory);
         req.setAttribute("choice", "category");
+        req.setAttribute("pSize", pSize);
     }
 
     private void chooseProduct(HttpServletRequest req, HttpServletResponse resp, String prodName) {
@@ -43,4 +48,6 @@ public class ShowcaseServlet extends HttpServlet {
         req.setAttribute("chosenProduct", chosenProduct);
         req.setAttribute("choice", "product");
     }
+
+
 }

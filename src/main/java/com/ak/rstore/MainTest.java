@@ -1,44 +1,44 @@
 package com.ak.rstore;
 
+import com.ak.rstore.exceptions.NoSuchRecordException;
+import com.ak.rstore.exceptions.RecordAlreadyExistsException;
 import com.ak.rstore.manager.ShopManager;
+import com.ak.rstore.model.Category;
 import com.ak.rstore.model.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.BigDecimal;
-import java.util.Objects;
 
 public class MainTest {
     static final Logger log = LoggerFactory.getLogger(MainTest.class);
     private static ShopManager manager = ShopManager.INSTANCE;
 
     public static void main(String[] args) {
-        String cName = "";
-        String pName = "";
-        String pDesc = "";
-        String pPrice = "";
-        String pAmount = "";
-        String pYear = "";
-        String pPhoto = "";
-        String pCat = "";
-
-        if (cName == null || Objects.equals(cName, "")) cName = "No category";
-        if (pCat == null || Objects.equals(pCat, "")) pCat = "No category";
-
-
-        if (pName == null || Objects.equals(pName, "")) pName = "No name";
-        if (pDesc == null || Objects.equals(pDesc, "")) pDesc = "No description";
-        if (pPrice == null || Objects.equals(pDesc, "")) pPrice = "0";
-        if (pAmount == null || Objects.equals(pDesc, "")) pAmount = "0";
-        if (pYear == null || Objects.equals(pDesc, "")) pYear = "0";
-        if (pPhoto == null || Objects.equals(pDesc, "")) pPhoto = "No photo";
-
-        String[] params = {pName, pDesc, pPrice, pAmount, pYear, pPhoto, pCat};
-
-        Product newProd = new Product(params[0], params[1], new BigDecimal(params[2]), Integer.valueOf(params[3]), Integer.valueOf(params[4]), params[5]);
-
-
-        System.out.println(newProd);
+//        String cName = "";
+//        String pName = "";
+//        String pDesc = "";
+//        String pPrice = "";
+//        String pAmount = "";
+//        String pYear = "";
+//        String pPhoto = "";
+//        String pCat = "";
+//
+//        if (cName == null || Objects.equals(cName, "")) cName = "No category";
+//        if (pCat == null || Objects.equals(pCat, "")) pCat = "No category";
+//
+//
+//        if (pName == null || Objects.equals(pName, "")) pName = "No name";
+//        if (pDesc == null || Objects.equals(pDesc, "")) pDesc = "No description";
+//        if (pPrice == null || Objects.equals(pDesc, "")) pPrice = "0";
+//        if (pAmount == null || Objects.equals(pDesc, "")) pAmount = "0";
+//        if (pYear == null || Objects.equals(pDesc, "")) pYear = "0";
+//        if (pPhoto == null || Objects.equals(pDesc, "")) pPhoto = "No photo";
+//
+//        String[] params = {pName, pDesc, pPrice, pAmount, pYear, pPhoto, pCat};
+//
+//        Product newProd = new Product(params[0], params[1], new BigDecimal(params[2]), Integer.valueOf(params[3]), Integer.valueOf(params[4]), params[5]);
+//
+//
+//        System.out.println(newProd);
 
 //        System.out.println(new BigDecimal(0));
 
@@ -138,6 +138,25 @@ public class MainTest {
 //                new BigDecimal(Integer.valueOf(150)),
 //                Integer.valueOf("1"),
 //                Integer.valueOf("1900"), "no photo"));
+
+//
+//        Category c = new Category("Category 4");
+//        manager.addCategory(c);
+
+//        Product p = new Product("Product 5","Description 5");
+//        manager.updateProduct(p);
+        Product pF = manager.findProductByName("Product 5");
+        Category c = manager.findCategoryByName("Category 1");
+        try {
+            manager.changeCategoryForProduct(pF.getProductId(),c.getName());
+        } catch (NoSuchRecordException | RecordAlreadyExistsException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
 
     }
 

@@ -29,7 +29,13 @@ public class LoginRegFilter implements Filter {
                 req.getSession().setAttribute("currentCustomer", null);
             }
             resp.sendRedirect("home.jsp");
-        } else {
+        } else if (url.contains("/Cart.do")) {
+            if (curCustomer == null) {
+                resp.sendRedirect("login.jsp");
+            } else {
+                resp.sendRedirect("cart.jsp");
+            }
+        }else {
             if (curCustomer != null) {
                 req.getSession().setAttribute("currentCustomer", null);
             }

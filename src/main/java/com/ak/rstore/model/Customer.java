@@ -117,7 +117,7 @@ public class Customer implements Serializable {
     }
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "REGISTRATION_DATE", unique = true, nullable = false, length = 10)
+    @Column(name = "REGISTRATION_DATE", unique = false, nullable = false, length = 10)
     public Date getRegistrationDate() {
         return registrationDate;
     }

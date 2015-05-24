@@ -31,19 +31,21 @@ public class StartServlet extends HttpServlet {
     }
 
     private void loadData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String reqFrom = req.getParameter("reqFrom");
+        String reqFrom = (String) req.getSession().getAttribute("reqFrom");
 
         List<Category> categories = manager.retrieveCategories();
         List<Product> newProducts = manager.retrieveNewProducts();
+        int npSize = newProducts.size();
         getServletContext().setAttribute("categories", categories);
         getServletContext().setAttribute("newProducts", newProducts);
+        getServletContext().setAttribute("npSize", npSize);
 
         if (Objects.equals(reqFrom, "fromAdm")) {
             resp.sendRedirect("admin.jsp");
             return;
         }
 
-        if (checkAndForwardToAdminPage(req, resp)) {
+        if (checkIfForwardToAdminPage(req, resp)) {
             resp.sendRedirect("admin.jsp");
             return;
         }
@@ -52,7 +54,7 @@ public class StartServlet extends HttpServlet {
         resp.sendRedirect("home.jsp");
     }
 
-    private boolean checkAndForwardToAdminPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private boolean checkIfForwardToAdminPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Customer sessionUser = (Customer) req.getSession().getAttribute("currentCustomer");
         return (sessionUser != null && sessionUser.getLoginName().equals("admin"));
     }

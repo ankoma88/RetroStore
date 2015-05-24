@@ -40,6 +40,7 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
         <url-pattern>/Register.do</url-pattern>
         <url-pattern>/Login.do</url-pattern>
         <url-pattern>/Logout.do</url-pattern>
+        <url-pattern>/Cart.do</url-pattern>
         <!--<url-pattern>*/</url-pattern>-->
     </filter-mapping>
 

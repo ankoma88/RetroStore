@@ -1,209 +1,234 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="root" value="${pageContext.request.contextPath}" />
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="root" value="${pageContext.request.contextPath}"/>
+
 
 <html>
-<%@ include file="/resources/templates/head.jsp" %>
+<%@ include file="head.jsp" %>
+
 <body>
+<%@ include file="header.jsp" %>
 
-<div id="container">
-    <%@ include file="/resources/templates/menu.jsp" %>
-    
-    <div id="content">
-
-        <div id="content_left">
-        	<div class="content_left_section">
-            	<h2>Categories</h2>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="left-sidebar">
+                    <h2>Categories</h2>
                     <c:forEach items="${applicationScope.categories}" var="category">
-                <form method="post" action="${root}/Admin.do?reqFrom=fromAdm">
-                    <table><tr>
-                        <td><a href="${root}/Admin.do?choice=chooseCatForEdtPrds&edtProdsOfCatName=${category.name}"><c:out value="${category.name}"/></a></td>
-                        <tr><td><div class="del_button"><a href="${root}/Admin.do?choice=delCatFull&delCatName=${category.name}">Delete category and products</a></div></td>
-                        <tr><td><div class="del_button"><a href="${root}/Admin.do?choice=delCatSoft&delLeaveCatName=${category.name}">Delete only category</a></div></td>
-                    </tr></table>
-                </form>
+                        <div class="brands-name">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li> <table class="table table-hover ">
+                                    <tr>
+                                        <td colspan="2">
+                                            <a href="${root}/Admin.do?choice=chooseCatForEdtPrds&edtProdsOfCatName=${category.name}"><c:out value="${category.name}"/></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    <td>
+                                        <a class="btn btn-default btn-sm" href="${root}/Admin.do?choice=delCatFull&delCatName=${category.name}">
+                                            Hard Delete</a>
+                                    </td>
+                                        <td>
+                                            <a class="btn btn-default btn-sm" href="${root}/Admin.do?choice=delCatSoft&delLeaveCatName=${category.name}">
+                                                Soft Delete</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                                </li>
+                            </ul>
+                        </div>
                     </c:forEach>
+                    <br/>
+
+                    <div class="brands_products">
+                        <h2>Edit Products</h2>
+                        <div class="brands-name">
+                            <ul class="nav nav-pills nav-stacked">
+                                <c:forEach items="${requestScope.categoryForEditingProds.products}" var="prodForEdt">
+                                    <li><table class="table table-hover ">
+                                        <tr>
+                                            <td>
+                                                <a class="btn btn-default btn-sm" href="${root}/Admin.do?choice=edtProd&prodForEdtName=${prodForEdt.name}">Edit "${prodForEdt.name}"</a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-default btn-sm" href="${root}/Admin.do?choice=delProd&delProdName=${prodForEdt.name}">Delete</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </div>
+                    </div>
+                    <br/>
+
+                </div>
             </div>
 
-            <div class="content_left_section">
-                <h2>Edit Products</h2>
-                <c:forEach items="${requestScope.categoryForEditingProds.products}" var="prodForEdt">
-                <form method="post" action="${root}/Admin.do?reqFrom=fromAdm">
-                    <table><tr>
-                        <a href="${root}/Admin.do?choice=edtProd&prodForEdtName=${prodForEdt.name}"><c:out value="${prodForEdt.name}"/></a>
-                        <tr><td><div class="del_button"><a href="${root}/Admin.do?choice=delProd&delProdName=${prodForEdt.name}">Delete product</a></div></td>
-                    </tr></table>
+            <div class="col-sm-6 padding-right">
+                <div style="text-align: center">
+
+                    <form method="post" action="${root}/Admin.do?choice=editP&editableProductId=${requestScope.editableProduct.productId}&oldCatName=${requestScope.editableProduct.category}">
+                        <div style="text-align: center">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="2">Edit product ${requestScope.editableProduct.name}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>New product name</td>
+                                    <td><label>
+                                        <input type="text" name="pName" value="${requestScope.editableProduct.name}"/>
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td>New product description</td>
+                                    <td><label>
+                                        <input type="text" name="pDesc" value="${requestScope.editableProduct.description}"/>
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td>Change category</td>
+                                    <td><label>
+                                        <input type="text" name="pCat" value="${requestScope.editableProduct.category}"/>
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td>New amount value</td>
+                                    <td><label>
+                                        <input type="number" name="pAmount" value="${requestScope.editableProduct.amount}"/>
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td>New price</td>
+                                    <td><label>
+                                        <input type="text" name="pPrice" pattern="^\d+(\.|\,)\d{2}$" value="${requestScope.editableProduct.price}"/>
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td>Change year of production</td>
+                                    <td><label>
+                                        <input type="number" name="pYear" value="${requestScope.editableProduct.year}"/>
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td>Change photo</td>
+                                    <td><label>
+                                        <input type="text" name="pPhoto" value="${requestScope.editableProduct.photo}"/>
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="submit" value="Submit" /></td>
+                                    <td><input type="reset" value="Reset" /></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+
+                    <br/>
+
+                    <form method="post" action="${root}/Admin.do?choice=addCat">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th colspan="2">Add new category</th>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <td>Category name</td>
+                                <td><label>
+                                    <input type="text" name="cName" value=""/>
+                                </label></td>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" value="Submit" /></td>
+                                <td><input type="reset" value="Reset" /></td>
+                            </tr>
+                        </table>
+                        </form>
+                    </div>
+
+                <br/>
+
+                <form method="post" action="${root}/Admin.do?choice=addProd">
+                    <div style="text-align: center">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th colspan="2">Add new product</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Product name</td>
+                                <td><label>
+                                    <input type="text" name="pName" value=""/>
+                                </label></td>
+                            </tr>
+                            <tr>
+                                <td>Product description</td>
+                                <td><label>
+                                    <input type="text" name="pDesc" value=""/>
+                                </label></td>
+                            </tr>
+                            <tr>
+                                <td>Category</td>
+                                <td><label>
+                                    <input type="text" name="pCat" value=""/>
+                                </label></td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <td>Amount</td>
+                                <td><label>
+                                    <input type="number" name="pAmount" value=""/>
+                                </label></td>
+                            </tr>
+                            <tr>
+                                <td>Price</td>
+                                <td><label>
+                                    <input type="number"  pattern="^\d+(\.|\,)\d{2}$" name="pPrice" value=""/>
+                                </label></td>
+                            </tr>
+                            <tr>
+                                <td>Year of production</td>
+                                <td><label>
+                                    <input type="number" name="pYear" value=""/>
+                                </label></td>
+                            </tr>
+                            <tr>
+                                <td>Photo</td>
+                                <td><label>
+                                    <input type="text" name="pPhoto" value=""/>
+                                </label></td>
+                            </tr>
+                            <tr>
+                                <td><input type="submit" value="Submit" /></td>
+                                <td><input type="reset" value="Reset" /></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </form>
 
-                </c:forEach>
+                <br/>
+
+
+
+
             </div>
         </div>
-
-        <div id="content_right">
-
-            <form method="post" action="${root}/Admin.do?reqFrom=fromAdm&choice=addCat">
-                <div style="text-align: center">
-                    <table border="1" width="30%" cellpadding="5">
-                        <thead>
-                        <tr>
-                            <th colspan="2">Add new category</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Category name</td>
-                            <td><label>
-                                <input type="text" name="cName" value=""/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="submit" value="Submit" /></td>
-                            <td><input type="reset" value="Reset" /></td>
-                        </tr>
-                        <%--<tr>--%>
-                            <%--<td colspan="2"><c:if test="${requestScope.catAddResult ne null}">--%>
-                                <%--<c:out value="${requestScope.catAddResult}"> </c:out></c:if></td>--%>
-                        <%--</tr>--%>
-                        </tbody>
-                    </table>
-                </div>
-            </form>
-
-            <form method="post" action="${root}/Admin.do?reqFrom=fromAdm&choice=addProd">
-                <div style="text-align: center">
-                    <table border="1" width="30%" cellpadding="5">
-                        <thead>
-                        <tr>
-                            <th colspan="2">Add new product</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Product name</td>
-                            <td><label>
-                                <input type="text" name="pName" value=""/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>Product description</td>
-                            <td><label>
-                                <input type="text" name="pDesc" value=""/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>Category</td>
-                            <td><label>
-                                <input type="text" name="pCat" value=""/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                        <tr>
-                            <td>Amount</td>
-                            <td><label>
-                                <input type="number" name="pAmount" value=""/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>Price</td>
-                            <td><label>
-                                <input type="number"  pattern="^\d+(\.|\,)\d{2}$" name="pPrice" value=""/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>Year of production</td>
-                            <td><label>
-                                <input type="number" name="pYear" value=""/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>Photo</td>
-                            <td><label>
-                                <input type="text" name="pPhoto" value=""/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="submit" value="Submit" /></td>
-                            <td><input type="reset" value="Reset" /></td>
-                        </tr>
-                        <%--<tr>--%>
-                            <%--<td colspan="2"><c:if test="${requestScope.prodAddResult ne null}">--%>
-                                <%--<c:out value="${requestScope.prodAddResult}"> </c:out></c:if></td>--%>
-                        <%--</tr>--%>
-                        </tbody>
-                    </table>
-                 </div>
-            </form>
-
-            <form method="post" action="${root}/Admin.do?reqFrom=fromAdm&choice=editP&editableProductId=${requestScope.editableProduct.productId}&oldCatName=${requestScope.editableProduct.category}">
-                <div style="text-align: center">
-                    <table border="1" width="30%" cellpadding="5">
-                        <thead>
-                        <tr>
-                            <th colspan="2">Edit product ${requestScope.editableProduct.name}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>New product name</td>
-                            <td><label>
-                                <input type="text" name="pName" value="${requestScope.editableProduct.name}"/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>New product description</td>
-                            <td><label>
-                                <input type="text" name="pDesc" value="${requestScope.editableProduct.description}"/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>Change category</td>
-                            <td><label>
-                                <input type="text" name="pCat" value="${requestScope.editableProduct.category}"/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>New amount value</td>
-                            <td><label>
-                                <input type="number" pattern="^\d+(\.|\,)\d{2}$" name="pAmount" value="${requestScope.editableProduct.amount}"/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>New price</td>
-                            <td><label>
-                                <input type="number" name="pPrice" value="${requestScope.editableProduct.price}"/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>Change year of production</td>
-                            <td><label>
-                                <input type="number" name="pYear" value="${requestScope.editableProduct.year}"/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td>Change photo</td>
-                            <td><label>
-                                <input type="text" name="pPhoto" value="${requestScope.editableProduct.photo}"/>
-                            </label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="submit" value="Submit" /></td>
-                            <td><input type="reset" value="Reset" /></td>
-                        </tr>
-                        <%--<tr>--%>
-                        <%--<td colspan="2"><c:if test="${requestScope.prodUpdResult ne null}">--%>
-                        <%--<c:out value="${requestScope.prodUpdResult}"> </c:out></c:if></td>--%>
-                        <%--</tr>--%>
-                        </tbody>
-                    </table>
-                </div>
-            </form>
-
     </div>
+</section>
 
-    <%@ include file="/resources/templates/footer.jsp" %>
+<%@ include file="footer.jsp" %>
 
 
-</div>
-
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

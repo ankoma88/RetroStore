@@ -32,6 +32,8 @@ public class AdminServlet extends HttpServlet {
         String edtProdsOfCatName = req.getParameter("edtProdsOfCatName");
         String prodForEdtName = req.getParameter("prodForEdtName");
 
+        req.getSession().setAttribute("reqFrom","fromAdm");
+
         switch (choice) {
             case ("delCatFull"):
                 if (delCatName != null) deleteCategoryCompletely(req, resp, delCatName); break;
@@ -80,6 +82,8 @@ public class AdminServlet extends HttpServlet {
 
         String[] params = {pName, pDesc, pAmount, pPrice, pYear, pPhoto, pCat};
 
+        req.getSession().setAttribute("reqFrom","fromAdm");
+
         switch (choice) {
             case ("addCat"):
                 addCategory(req, resp, cName); break;
@@ -87,7 +91,7 @@ public class AdminServlet extends HttpServlet {
                 addProduct(req, resp, params); break;
             case ("editP"):
                 changeProduct(req, resp, params, editableProductId, oldCatName); break;
-            default: req.getRequestDispatcher("/Start.do?reqFrom=fromAdm");
+            default: req.getRequestDispatcher("/Start.do");
         }
 
     }

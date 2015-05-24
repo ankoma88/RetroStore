@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @WebServlet("/Login.do")
 public class LoginServlet extends HttpServlet {
-    static final Logger log = LoggerFactory.getLogger(StartServlet.class);
+    static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
     private static ShopManager manager = ShopManager.INSTANCE;
 
     @Override
